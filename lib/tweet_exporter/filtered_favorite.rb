@@ -1,11 +1,12 @@
 module TweetExporter
   class FilteredFavorite
-    attr_accessor :id, :username, :text
+    attr_accessor :id, :username, :text, :urls
 
     def initialize(args)
       @id = args[:id]
       @username = args[:username]
       @text = args[:text]
+      @urls = args[:urls]
     end
 
     # http://stackoverflow.com/questions/3226054/how-to-convert-a-ruby-object-to-json

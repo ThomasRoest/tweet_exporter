@@ -1,4 +1,5 @@
 require "tweet_exporter/filtered_favorite"
+require "tweet_exporter/html_builder"
 require "yaml"
 
 module TweetExporter
@@ -14,6 +15,9 @@ module TweetExporter
       @user = Object.new
       @favorites = []
       @filtered_favorites = []
+      get_user
+      get_favorited_tweets
+      filter_tweets
     end
 
     def get_user
@@ -29,15 +33,13 @@ module TweetExporter
     def filter_tweets
       @filtered_favorites = @favorites.map{ |obj| 
                               TweetExporter::FilteredFavorite.new(id: obj.attrs[:id], 
-                                                          username: obj.attrs[:user][:name], 
-                                                          text: obj.attrs[:text] ) }
+                                                           username: obj.attrs[:user][:name], 
+                                                          text: obj.attrs[:text],
+                                                          urls: obj.attrs[:entities][:urls] ) }
     end
-
 
     def export_tweets
-      # create directory if not present
-      File.write('tweets/hellotest.yaml', YAML.dump(@filtered_favorites))
+      TweetExporter::HtmlBuilder.new(@filtered_favorites)
     end
-
   end
 end
