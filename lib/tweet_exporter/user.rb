@@ -24,22 +24,24 @@ module TweetExporter
     end
 
     def get_user
-      # cli user arg
+      # set to cli arg
       @user = @client.user('trwroest')
     end
 
     def get_favorited_tweets
-      @favorites = @client.favorites(@user, count: 100)
-      # count (Integer) — Specifies the number of records to retrieve. Must be less than or equal to 100.
+      # max = 193 (for count 200) # always returns count -3
+      
+      @favorites = @client.favorites(@user, count: 250)
       # :since_id (Integer) — Returns results with an ID greater than (that is, more recent than) the specified ID.
     end
 
     def filter_tweets
       @filtered_favorites = @favorites.map{ |obj| 
                               TweetExporter::FilteredFavorite.new(id: obj.attrs[:id], 
-                                                           username: obj.attrs[:user][:name], 
-                                                          text: obj.attrs[:text],
-                                                          urls: obj.attrs[:entities][:urls] ) }
+                                                                  profile_image_url: obj.attrs[:user][:profile_image_url],
+                                                                  username: obj.attrs[:user][:name], 
+                                                                  text: obj.attrs[:text],
+                                                                  urls: obj.attrs[:entities][:urls] ) }
     end
 
 
