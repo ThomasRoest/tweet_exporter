@@ -5,20 +5,16 @@ module TweetExporter
       build_html
     end
 
-    # create directory if not present?
     def build_html
-     full_urls = @tweets.map{|tweet| 
-      "<p><b>#{tweet.username}</b></p>\
-       <p>#{tweet.text}<a href='https://twitter.com/i/web/status/#{tweet.id}'>#{tweet.id}</a></p> \
-       <p>#{tweet.urls}</p>
+     html = @tweets.map{|tweet| 
+      "<p><b>#{tweet.username}</b> - <a href='https://twitter.com/i/web/status/#{tweet.id}'>#{tweet.id}</a></p>\
+       <p>#{tweet.text}</p> \
+       <p><a href=#{tweet.urls[0][:expanded_url] unless tweet.urls.empty?}>#{tweet.urls[0][:expanded_url] unless tweet.urls.empty?}<a></p>
+       <hr>
        "
     }      
 
-     File.write("tweets/tweets#{rand(1..1000)}.html", full_urls.join())  
-
+     File.write("tweets/tweets#{rand(1..1000)}.html", html.join())  
     end
   end
 end
-
-
-# <a href=#{tweet.expanded_url}>#{tweet.expanded_url}</a>"
