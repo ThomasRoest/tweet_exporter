@@ -1,10 +1,9 @@
 require "tweet_exporter/filtered_favorite"
 require "tweet_exporter/html_builder"
-require "yaml"
 
 module TweetExporter
   class User
-    attr_reader :user, :favorites, :filtered_favorites, :client
+    attr_reader :user, :favorites, :filtered_favorites, :client, :max_id
 
     def initialize()
       @client = Twitter::REST::Client.new do |config|
@@ -14,13 +13,13 @@ module TweetExporter
         config.access_token_secret = ENV["ACCESS_TOKEN_SECRET"]
       end
 
-      @user_arg = user
+      # @user_arg = user
       @user = Object.new
       @favorites = []
       @filtered_favorites = []
+      @max_id = nil
+      @export_count = nil
       get_user
-      get_favorited_tweets
-      filter_tweets
     end
 
     def get_user
@@ -28,11 +27,21 @@ module TweetExporter
       @user = @client.user('trwroest')
     end
 
+    def execute
+      get_favorited_tweets
+      filter_tweets
+      export_tweets
+    end
+
     def get_favorited_tweets
-      # max = 193 (for count 200) # always returns count -3
-      
-      @favorites = @client.favorites(@user, count: 250)
-      # :since_id (Integer) — Returns results with an ID greater than (that is, more recent than) the specified ID.
+      if max_id == nil
+        @favorites = @client.favorites(@user, count: 150)
+        @max_id = @favorites[-1].attrs[:id]
+      else
+        @favorites = @client.favorites(@user, count: 150, max_id: @max_id)
+        @max_id = @favorites[-1].attrs[:id]
+      end
+      @favorites
     end
 
     def filter_tweets
@@ -45,14 +54,18 @@ module TweetExporter
     end
 
 
-    def unlike_tweet
-      # @client.status(848077321038737409)
-      # obj.client.unfavorite(848080581313343488, 848083460325425152, 848077321038737409)
+    # add tweet.created_at in builder 
+    def export_tweets
+      @export_count = 1 if @export_count == nil
+      TweetExporter::HtmlBuilder.new(@filtered_favorites, @export_count)
+      @export_count += 1
+      "exported #{@favorites.count} tweets"
     end
 
 
-    def export_tweets
-      TweetExporter::HtmlBuilder.new(@filtered_favorites)
+    def unlike_tweet
+      # @client.status(848077321038737409)
+      # obj.client.unfavorite(848080581313343488, 848083460325425152, 848077321038737409)
     end
   end
 end
