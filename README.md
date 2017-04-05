@@ -11,8 +11,7 @@ Run `bin/console` for an interactive prompt that will allow you to experiment.
 To retrieve a new batch of favorites
 run `bin/console`
 
-`obj = TweetExporter::User.new('yourusername')
-`obj.execute'
+`obj = TweetExporter::User.new('yourusername')` and `obj.execute`
 
 This will export a batch of twitter favorites (193), starting with the most recent. Run the command a second time to retrieve the next. 
 
