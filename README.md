@@ -1,15 +1,25 @@
-# Tweet
+# TweetExporter
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/tweet`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
-
+Ruby project to export your favorited tweets to html pages.
+ 
 ## Installation
 
-Add this line to your application's Gemfile:
+After checking out the repo, run `bin/setup` to install dependencies. 
+Create an .env file with your twitter keys.
+Run `bin/console` for an interactive prompt that will allow you to experiment.
+
+To retrieve a new batch of favorites
+run `bin/console`
+
+`obj = TweetExporter::User.new('yourusername')
+`obj.execute'
+
+This will export a batch of twitter favorites (193), starting with the most recent. Run the command a second time to retrieve the next. 
+
+<!-- Add this line to your application's Gemfile:
 
 ```ruby
-gem 'tweet'
+gem 'tweet_exporter'
 ```
 
 And then execute:
@@ -39,3 +49,4 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/[USERN
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
 
+ -->
