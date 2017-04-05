@@ -3,9 +3,9 @@ require "tweet_exporter/html_builder"
 
 module TweetExporter
   class User
-    attr_reader :user, :favorites, :filtered_favorites, :client, :max_id
+    attr_reader :client_user, :favorites, :filtered_favorites, :client, :max_id
 
-    def initialize()
+    def initialize(username)
       @client = Twitter::REST::Client.new do |config|
         config.consumer_key        = ENV["CONSUMER_KEY"]
         config.consumer_secret     = ENV["CONSUMER_SECRET"] 
@@ -13,8 +13,9 @@ module TweetExporter
         config.access_token_secret = ENV["ACCESS_TOKEN_SECRET"]
       end
 
-      # @user_arg = user
-      @user = Object.new
+      @username = username
+      @client_user = Object.new
+      
       @favorites = []
       @filtered_favorites = []
       @max_id = nil
@@ -23,8 +24,7 @@ module TweetExporter
     end
 
     def get_user
-      # set to cli arg
-      @user = @client.user('trwroest')
+      @client_user = @client.user(@username)
     end
 
     def execute
@@ -35,10 +35,10 @@ module TweetExporter
 
     def get_favorited_tweets
       if max_id == nil
-        @favorites = @client.favorites(@user, count: 150)
+        @favorites = @client.favorites(@user, count: 200)
         @max_id = @favorites[-1].attrs[:id]
       else
-        @favorites = @client.favorites(@user, count: 150, max_id: @max_id)
+        @favorites = @client.favorites(@user, count: 200, max_id: @max_id)
         @max_id = @favorites[-1].attrs[:id]
       end
       @favorites
@@ -53,11 +53,9 @@ module TweetExporter
                                                                   urls: obj.attrs[:entities][:urls] ) }
     end
 
-
-    # add tweet.created_at in builder 
     def export_tweets
       @export_count = 1 if @export_count == nil
-      TweetExporter::HtmlBuilder.new(@filtered_favorites, @export_count)
+      TweetExporter::HtmlBuilder.new(@filtered_favorites, @export_count, @username)
       @export_count += 1
       "exported #{@favorites.count} tweets"
     end

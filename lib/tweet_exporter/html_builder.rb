@@ -1,12 +1,13 @@
 module TweetExporter
   class HtmlBuilder
-    def initialize(tweets, count)
+    def initialize(tweets, count, username)
       @tweets = tweets
       @count = count
-      build_html(count)
+      @username = username
+      build_html
     end
 
-    def build_html(count)
+    def build_html
      html = @tweets.map{|tweet| 
       "
       <div style='display:flex;align-items:flex-start'> \
@@ -21,10 +22,11 @@ module TweetExporter
       <hr style='border: 0;border-top: 1px solid #eee;margin: 20px 0 20px 0px;'>
       "
     }  
-
-     # check for changing user avatar url? --> add placeholder    
-
-     File.write("tweets/tweets_batch_#{count}.html", html.join())  
+    
+    unless File.directory?('tweets') 
+      Dir.mkdir 'tweets'
+    end
+    File.write("tweets/tweets_batch_#{@count}_#{@username}.html", html.join())  
     end
   end
 end
