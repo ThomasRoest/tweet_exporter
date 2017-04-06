@@ -3,8 +3,6 @@ require "tweet_exporter/html_builder"
 
 module TweetExporter
   class User
-    attr_reader :client_user, :favorites, :filtered_favorites, :client, :max_id
-
     def initialize(username)
       @client = Twitter::REST::Client.new do |config|
         config.consumer_key        = ENV["CONSUMER_KEY"]
@@ -14,16 +12,10 @@ module TweetExporter
       end
 
       @username = username
-      @client_user = Object.new
-      
-      @favorites = []
-      @filtered_favorites = []
+      @favorites = nil
+      @filtered_favorites = nil
       @max_id = nil
       @export_count = nil
-      get_user
-    end
-
-    def get_user
       @client_user = @client.user(@username)
     end
 
@@ -33,37 +25,39 @@ module TweetExporter
       export_tweets
     end
 
-    def get_favorited_tweets
-      if max_id == nil
-        @favorites = @client.favorites(@user, count: 200)
-        @max_id = @favorites[-1].attrs[:id]
-      else
-        @favorites = @client.favorites(@user, count: 200, max_id: @max_id)
-        @max_id = @favorites[-1].attrs[:id]
+    private
+
+      def get_favorited_tweets
+        if @max_id == nil
+          @favorites = @client.favorites(@client_user, count: 200)
+          @max_id = @favorites[-1].attrs[:id]
+        else
+          @favorites = @client.favorites(@client_user, count: 200, max_id: @max_id)
+          @max_id = @favorites[-1].attrs[:id]
+        end
+        @favorites
       end
-      @favorites
-    end
 
-    def filter_tweets
-      @filtered_favorites = @favorites.map{ |obj| 
-                              TweetExporter::FilteredFavorite.new(id: obj.attrs[:id], 
-                                                                  profile_image_url: obj.attrs[:user][:profile_image_url],
-                                                                  username: obj.attrs[:user][:name], 
-                                                                  text: obj.attrs[:text],
-                                                                  urls: obj.attrs[:entities][:urls] ) }
-    end
+      def filter_tweets
+        @filtered_favorites = @favorites.map{ |obj| 
+                                TweetExporter::FilteredFavorite.new(id: obj.attrs[:id], 
+                                                                    profile_image_url: obj.attrs[:user][:profile_image_url],
+                                                                    username: obj.attrs[:user][:name], 
+                                                                    text: obj.attrs[:text],
+                                                                    urls: obj.attrs[:entities][:urls] ) }
+      end
 
-    def export_tweets
-      @export_count = 1 if @export_count == nil
-      TweetExporter::HtmlBuilder.new(@filtered_favorites, @export_count, @username)
-      @export_count += 1
-      "exported #{@favorites.count} tweets"
-    end
+      def export_tweets
+        @export_count = 1 if @export_count == nil
+        TweetExporter::HtmlBuilder.new(@filtered_favorites, @export_count, @username)
+        @export_count += 1
+        "exported #{@favorites.count} tweets"
+      end
 
 
-    def unlike_tweet
-      # @client.status(848077321038737409)
-      # obj.client.unfavorite(848080581313343488, 848083460325425152, 848077321038737409)
-    end
+      # def unlike_tweet
+      #   # @client.status(848077321038737409)
+      #   # obj.client.unfavorite(848080581313343488, 848083460325425152, 848077321038737409)
+      # end
   end
 end
