@@ -19,10 +19,10 @@ module TweetExporter
       @client_user = @client.user(@username)
     end
 
-    def execute
+    def export_tweets
       get_favorited_tweets
       filter_tweets
-      export_tweets
+      build_tweets
     end
 
     private
@@ -47,11 +47,11 @@ module TweetExporter
                                                                     urls: obj.attrs[:entities][:urls] ) }
       end
 
-      def export_tweets
+      def build_tweets
         @export_count = 1 if @export_count == nil
         TweetExporter::HtmlBuilder.new(@filtered_favorites, @export_count, @username)
         @export_count += 1
-        "exported #{@favorites.count} tweets"
+        "exported #{@favorites.count} tweets to /tweets"
       end
 
 
