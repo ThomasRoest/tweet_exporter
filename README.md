@@ -1,6 +1,8 @@
 # TweetExporter
 
 Export your favorited tweets to simple html pages.
+
+![tweet-exporter](https://s3-eu-west-1.amazonaws.com/github-images123/tweet_exporter.jpg)
  
 ## Installation
 
@@ -19,6 +21,8 @@ This will export a batch of twitter favorites around the maximum of 200, startin
 <!-- Add this line to your application's Gemfile:
 
 ```ruby
+
+
 gem 'tweet_exporter'
 ```
 
