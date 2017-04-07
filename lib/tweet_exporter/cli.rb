@@ -14,4 +14,4 @@ module TweetExporter
   end
 end
 
-# bundle exec exe/tweetexporter get_name thomask
+# bundle exec exe/tweetexporter get_name username

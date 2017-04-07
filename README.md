@@ -5,15 +5,16 @@ Ruby project to export your favorited tweets to html pages.
 ## Installation
 
 After checking out the repo, run `bin/setup` to install dependencies. 
-Create an .env file with your twitter keys.
+Create an .env file with your twitter keys. Go to [twitter apps](https://apps.twitter.com/) to create a new app with access credentials.
+
 Run `bin/console` for an interactive prompt that will allow you to experiment.
 
 To retrieve a new batch of favorites
 run `bin/console`
 
-`obj = TweetExporter::User.new('yourusername')` and `obj.execute`
+`obj = TweetExporter::User.new('yourusername')` and `obj.export_tweets`
 
-This will export a batch of twitter favorites (193), starting with the most recent. Run the command a second time to retrieve the next. 
+This will export a batch of twitter favorites around the maximum of 200, starting with the most recent. Run the command a second time to retrieve the next. 
 
 <!-- Add this line to your application's Gemfile:
 
