@@ -7,9 +7,7 @@ Export your favorited tweets to simple html pages.
 ## Installation
 
 After checking out the repo, run `bin/setup` to install dependencies. 
-Create an .env file with your twitter keys. Go to [twitter apps](https://apps.twitter.com/) to create a new app with access credentials.
-
-Run `bin/console` for an interactive prompt that will allow you to experiment.
+Go to [twitter apps](https://apps.twitter.com/) to create a new app with access credentials. Create an .env file with your twitter keys. 
 
 To retrieve a new batch of favorites
 run `bin/console`
@@ -18,33 +16,8 @@ run `bin/console`
 
 This will export a batch of twitter favorites around the maximum of 200, starting with the most recent. Run the command a second time to retrieve the next batch. 
 
-<!-- Add this line to your application's Gemfile:
 
-```ruby
-
-
-gem 'tweet_exporter'
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install tweet
-
-## Usage
-
-TODO: Write usage instructions here
-
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
-## Contributing
+<!-- ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/tweet.
 
@@ -53,4 +26,4 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/[USERN
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
 
- -->
+ --> 
