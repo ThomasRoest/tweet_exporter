@@ -30,11 +30,10 @@ module TweetExporter
       def get_favorited_tweets
         if @max_id == nil
           @favorites = @client.favorites(@client_user, count: 200)
-          @max_id = @favorites[-1].attrs[:id]
         else
           @favorites = @client.favorites(@client_user, count: 200, max_id: @max_id)
-          @max_id = @favorites[-1].attrs[:id]
         end
+        @max_id = @favorites[-1].attrs[:id]
         @favorites
       end
 
