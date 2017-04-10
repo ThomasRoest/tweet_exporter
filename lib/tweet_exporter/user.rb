@@ -38,12 +38,11 @@ module TweetExporter
       end
 
       def filter_tweets
-        @filtered_favorites = @favorites.map{ |obj| 
-                                TweetExporter::FilteredFavorite.new(id: obj.attrs[:id], 
-                                                                    profile_image_url: obj.attrs[:user][:profile_image_url],
-                                                                    username: obj.attrs[:user][:name], 
-                                                                    text: obj.attrs[:text],
-                                                                    urls: obj.attrs[:entities][:urls] ) }
+        @filtered_favorites = @favorites.map{ |obj| TweetExporter::FilteredFavorite.new(id: obj.attrs[:id], 
+                                                                                        profile_image_url: obj.attrs[:user][:profile_image_url],
+                                                                                        username: obj.attrs[:user][:name], 
+                                                                                        text: obj.attrs[:text],
+                                                                                        urls: obj.attrs[:entities][:urls] ) }
       end
 
       def build_tweets
@@ -53,10 +52,8 @@ module TweetExporter
         "exported #{@favorites.count} tweets to /tweets"
       end
 
-
       # def unlike_tweet
-      #   # @client.status(848077321038737409)
-      #   # obj.client.unfavorite(848080581313343488, 848083460325425152, 848077321038737409)
+      #   # obj.client.unfavorite(848080581313343488)
       # end
   end
 end
